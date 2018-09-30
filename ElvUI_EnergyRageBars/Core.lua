@@ -134,7 +134,7 @@ function ERB:ShowBars()
 end
 
 local function handleVisibilityResourceBar(event, arg1)
-	if not E.db.ElvUI_EnergyRageBars.combatFade then return end
+	if not E.db.ElvUI_EnergyRageBars.combatFade or E.ConfigurationMode then return end
 	local frame = _G["ElvUF_Player"]
 	if frame then
 		local db = frame.db	
