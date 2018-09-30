@@ -1,8 +1,8 @@
 ﻿## Interface: 30300
 ## Author: Areasis
 ## Version: 1.00
-## Title: |cffff8000A|rscension |cffff8000R|resources|r (for using with custom UI)
-## Notes: Addon that comes with the patches in order to display the energy and rage of players
+## Title: |cffA11313E|r|cffC4C4C4lvUI|r |cffA11313E|r|cffC4C4C4nergy|r |cffA11313R|r|cffC4C4C4age|r |cffA11313B|r|cffC4C4C4ars|r (for using with custom UI)
+## Notes: A modification of |cffff8000A|rscension addon that comes with the patches in order to display the energy and rage of players
 ## DefaultState: enabled
 ## SavedVariablesPerCharacter: Energy_Textures, Energy_ShowText, Rage_Textures, Rage_ShowText, ConfigFrame_varis
 ## RequiredDeps: ElvUI

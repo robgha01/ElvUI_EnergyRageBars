@@ -5,9 +5,6 @@ local UF = E:GetModule("UnitFrames");
 local format, split, find = string.format, string.split, string.find
 ERB.MainFrame = CreateFrame("Frame","MainFrame",UIParent,nil)
 local mainFrame = ERB.MainFrame
-local RageFrame = CreateFrame("Frame","RageFrame",ERB.MainFrame,nil)
-local defaultRageBarColor = {1,0,0}
-local defaultEnergyBarColor = {1,0,0}
 local moduleCallbacks = {}
 
 --Default options
@@ -25,7 +22,6 @@ P["ElvUI_EnergyRageBars"] = {
 	["debug"] = false
 }
 
--- this is a UI for displaying energy/rage for ElvUI
 function ERB:debug(key, ...)
 	if ViragDevTool_AddData and E.db.ElvUI_EnergyRageBars.debug then 
         ViragDevTool_AddData({...}, "Ascension energy/rage: "..key) 
@@ -43,7 +39,6 @@ function ERB:RegisterModule(name, loadFunc, updateSettingsFunc)
 		updateSettingsFunc = updateSettingsFunc
 	}
 end
-
 
 function ERB:PositionFrame()
 	local frame = _G["ElvUF_Player"]
@@ -128,16 +123,22 @@ function ERB:UpdateSettings()
 	end
 end
 
+function ERB:HideBars()
+	ERB.IsBarsShown = false
+	UIFrameFadeOut(mainFrame, 0.2, mainFrame:GetAlpha(), 0)
+end
+
+function ERB:ShowBars()
+	ERB.IsBarsShown = true
+	UIFrameFadeIn(mainFrame, 0.2, mainFrame:GetAlpha(), 1)
+end
+
 local function handleVisibilityResourceBar(event, arg1)
-	ERB:debug("Core->handleVisibilityResourceBar(event, arg1)", event, arg1)
 	if not E.db.ElvUI_EnergyRageBars.combatFade then return end
 	local frame = _G["ElvUF_Player"]
 	if frame then
 		local db = frame.db	
-		if db.enable and frame:IsShown() then
-			-- Showing energy/rage bar as player frame is visible
-			UIFrameFadeIn(mainFrame, 0.2, mainFrame:GetAlpha(), 1)
-		end
+		if db.enable and frame:IsShown() then ERB:ShowBars() end
 	end
 
 	if((event == "UNIT_SPELLCAST_START"
@@ -151,9 +152,9 @@ local function handleVisibilityResourceBar(event, arg1)
 	local target, focus = UnitExists("target"), UnitExists("focus")
 	local combat = UnitAffectingCombat("player")
 	if (cast or channel) or (cur ~= max) or (target or focus) or combat then
-		UIFrameFadeIn(mainFrame, 0.2, mainFrame:GetAlpha(), 1)			
+		ERB:ShowBars()
 	else
-		UIFrameFadeOut(mainFrame, 0.2, mainFrame:GetAlpha(), 0)			
+		ERB:HideBars()
 	end	
 end
 
@@ -171,18 +172,9 @@ function ERB:Initialize()
 	mainFrame:SetScript("OnDragStart", mainFrame.StartMoving)
 	mainFrame:SetScript("OnHide", mainFrame.StopMovingOrSizing)
 	mainFrame:SetScript("OnDragStop", mainFrame.StopMovingOrSizing)
-	mainFrame:RegisterEvent("ADDON_LOADED")
-	mainFrame:RegisterEvent("PLAYER_LOGOUT")
-	mainFrame:RegisterEvent("PLAYER_REGEN_DISABLED")
-	mainFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
-	mainFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
-	mainFrame:RegisterEvent("UNIT_SPELLCAST_START")
-	mainFrame:RegisterEvent("UNIT_SPELLCAST_STOP")
-	mainFrame:RegisterEvent("UNIT_SPELLCAST_CHANNEL_START")
-	mainFrame:RegisterEvent("UNIT_SPELLCAST_CHANNEL_STOP")
-	mainFrame:RegisterEvent("UNIT_HEALTH")
-	mainFrame:RegisterEvent("PLAYER_FOCUS_CHANGED")
 	mainFrame:Show()
+
+	ERB.IsBarsShown = true
 
 	-- initialize modules
 	for _,v in pairs(moduleCallbacks) do
@@ -190,9 +182,20 @@ function ERB:Initialize()
 	end
 
 	ERB:UpdateSettings()
-	ERB:PositionFrame()
-	handleVisibilityResourceBar(event, arg1)
+	ERB:PositionFrame()	
 	ERB:debug("Options", E.db.ElvUI_EnergyRageBars)
+
+	-- register events
+	ERB:RegisterEvent("PLAYER_REGEN_DISABLED", handleVisibilityResourceBar)
+	ERB:RegisterEvent("PLAYER_REGEN_ENABLED", handleVisibilityResourceBar)
+	ERB:RegisterEvent("PLAYER_TARGET_CHANGED", handleVisibilityResourceBar)
+	ERB:RegisterEvent("UNIT_SPELLCAST_START", handleVisibilityResourceBar)
+	ERB:RegisterEvent("UNIT_SPELLCAST_STOP", handleVisibilityResourceBar)
+	ERB:RegisterEvent("UNIT_SPELLCAST_CHANNEL_START", handleVisibilityResourceBar)
+	ERB:RegisterEvent("UNIT_SPELLCAST_CHANNEL_STOP", handleVisibilityResourceBar)
+	ERB:RegisterEvent("UNIT_HEALTH", handleVisibilityResourceBar)
+	ERB:RegisterEvent("PLAYER_FOCUS_CHANGED", handleVisibilityResourceBar)
+	handleVisibilityResourceBar()
 end
 
 --This function will get called by ElvUI automatically when it is ready to initialize modules

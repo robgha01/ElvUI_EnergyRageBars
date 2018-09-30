@@ -152,6 +152,18 @@ local function InsertOptions()
 
 	-- Mover
 	E:CreateMover(ERB.MainFrame, "AscensionEnergyRageMover", "Ascension Energy Rage")
+
+	local vis = nil
+	ERB:SecureHook(E, "ToggleConfigMode", function(self, override, configType)
+		ERB:debug("ERB:SecureHook->ToggleConfigMode")
+		if E.ConfigurationMode and ERB.IsBarsShown then
+			vis = true
+			ERB:HideBars()
+		elseif vis then
+			vis = nil
+			ERB:ShowBars()
+		end
+	end)
 end
 
 local function OnInitialize()

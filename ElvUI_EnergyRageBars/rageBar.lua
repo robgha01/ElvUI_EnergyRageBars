@@ -10,9 +10,9 @@ local function OnUpdateSettings()
     local height = E.db.ElvUI_EnergyRageBars.height
     
     if E.db.ElvUI_EnergyRageBars.barTexture == "NORMAL" then
-		rageStatusBar:SetStatusBarTexture("Interface\\AddOns\\AscensionElvUI\\textures\\normTex.tga")
+		rageStatusBar:SetStatusBarTexture("Interface\\AddOns\\ElvUI_EnergyRageBars\\textures\\normTex.tga")
 	elseif E.db.ElvUI_EnergyRageBars.barTexture == "MINIMALIST" then
-		rageStatusBar:SetStatusBarTexture("Interface\\AddOns\\AscensionElvUI\\textures\\Minimalist.tga")
+		rageStatusBar:SetStatusBarTexture("Interface\\AddOns\\ElvUI_EnergyRageBars\\textures\\Minimalist.tga")
     end
     
     local c = E.db.ElvUI_EnergyRageBars.rageBarColor
@@ -57,7 +57,7 @@ function RageFrame_eventHandler(self, event, ...)
 end
 
 local function OnInitialize()
-    ERB.RageFrame = CreateFrame("Frame","EnergyFrame",ERB.MainFrame,nil) rageFrame = ERB.RageFrame
+    ERB.RageFrame = CreateFrame("Frame","RageFrame",ERB.MainFrame,nil) rageFrame = ERB.RageFrame
     current_rage = UnitPower("player",1)
 	max_rage = UnitPowerMax("player",1)
 	rageFrame:SetSize(100,20)

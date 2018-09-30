@@ -10,9 +10,9 @@ local function OnUpdateSettings()
 	local height = E.db.ElvUI_EnergyRageBars.height
 
     if E.db.ElvUI_EnergyRageBars.barTexture == "NORMAL" then
-		energyStatusBar:SetStatusBarTexture("Interface\\AddOns\\AscensionElvUI\\textures\\normTex.tga")		
+		energyStatusBar:SetStatusBarTexture("Interface\\AddOns\\ElvUI_EnergyRageBars\\textures\\normTex.tga")		
 	elseif E.db.ElvUI_EnergyRageBars.barTexture == "MINIMALIST" then
-		energyStatusBar:SetStatusBarTexture("Interface\\AddOns\\AscensionElvUI\\textures\\Minimalist.tga")		
+		energyStatusBar:SetStatusBarTexture("Interface\\AddOns\\ElvUI_EnergyRageBars\\textures\\Minimalist.tga")		
     end
     
     local c = E.db.ElvUI_EnergyRageBars.energyBarColor
@@ -23,11 +23,9 @@ local function OnUpdateSettings()
     
     energyFrame:ClearAllPoints() -- We need this to make the toggle top/bottom work
     if E.db.ElvUI_EnergyRageBars.energyBarFirst then
-        ERB:debug("Energy First setting energybar to TOP")
-		energyFrame:SetPoint("TOP")
+        energyFrame:SetPoint("TOP")
     else
-        ERB:debug("Energy Last setting energybar to BOTTOM")
-		energyFrame:SetPoint("BOTTOM")		
+        energyFrame:SetPoint("BOTTOM")		
 	end
 end
 
