@@ -10,6 +10,12 @@ function colorizeSettingName(settingName)
 	return format("|cff1784d1%s|r", settingName)
 end
 
+local function OnUpdateSettings()
+	if AscensionEnergyRageMover then
+		AscensionEnergyRageMover:SetFrameStrata(E.db.ElvUI_EnergyRageBars.frameStrata)
+	end
+end
+
 local function InsertOptions()
 	E.Options.args.ElvUI_EnergyRageBars = {
 		order = 1,
@@ -61,6 +67,18 @@ local function InsertOptions()
 				values = {
 					["NORMAL"] = "Normal",
 					["MINIMALIST"] = "Minimalist",
+				},
+			},
+			frameStrata = {
+				order = 7,
+				type = "select",
+				name = "Bar frame strata",
+				values = {
+					["BACKGROUND"] = "BACKGROUND",
+					["LOW"] = "LOW",
+					["MEDIUM"] = "MEDIUM",
+					["HIGH"] = "HIGH",
+					["DIALOG"] = "DIALOG",
 				},
 			},
 			headerEnergyBar = {
@@ -150,9 +168,9 @@ local function InsertOptions()
 		}
 	}
 
-	-- Mover
-	E:CreateMover(ERB.MainFrame, "AscensionEnergyRageMover", "Ascension Energy Rage")
-	AscensionEnergyRageMover:SetFrameStrata("TOOLTIP")
+	-- Mover	
+	E:CreateMover(ERB.MainFrame, "AscensionEnergyRageMover")
+	OnUpdateSettings()
 
 	local vis = nil
 	ERB:SecureHook(E, "ToggleConfigMode", function(self, override, configType)
@@ -172,4 +190,4 @@ local function OnInitialize()
 	EP:RegisterPlugin(addon, InsertOptions)
 end
 
-ERB:RegisterModule("ERB Options", OnInitialize)
+ERB:RegisterModule("ERB Options", OnInitialize, OnUpdateSettings)

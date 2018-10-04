@@ -15,6 +15,7 @@ P["ElvUI_EnergyRageBars"] = {
 	["energyBarFirst"] = false,
 	["combatFade"] = false,
 	["barTexture"] = "NORMAL",
+	["frameStrata"] = "HIGH",
 	["energyBarShowResourceValue"] = true,
 	["energyBarColor"] = { r = 1, g = 1, b = 0 },
 	["rageBarShowResourceValue"] = true,
@@ -116,7 +117,8 @@ function ERB:UpdateSettings()
 	local width = E.db.ElvUI_EnergyRageBars.width
 	local height = E.db.ElvUI_EnergyRageBars.height	
 	mainFrame:SetSize(width, height * 2 + 1)
-
+	mainFrame:SetFrameStrata(E.db.ElvUI_EnergyRageBars.frameStrata)
+	
 	-- Update settings for modules
 	for _,v in pairs(moduleCallbacks) do
 		if v.updateSettingsFunc then v.updateSettingsFunc() end
@@ -165,6 +167,7 @@ function ERB:Initialize()
 	mainFrame:SetMovable(true)
 	mainFrame:EnableMouse(true)
 	mainFrame:SetUserPlaced(true)
+	mainFrame:SetFrameStrata(E.db.ElvUI_EnergyRageBars.frameStrata)
 
 	local mainFrameTexture = mainFrame:CreateTexture()
 	mainFrameTexture:SetAllPoints(mainFrame)
