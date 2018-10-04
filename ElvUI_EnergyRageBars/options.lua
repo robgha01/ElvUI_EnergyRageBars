@@ -152,6 +152,7 @@ local function InsertOptions()
 
 	-- Mover
 	E:CreateMover(ERB.MainFrame, "AscensionEnergyRageMover", "Ascension Energy Rage")
+	AscensionEnergyRageMover:SetFrameStrata("TOOLTIP")
 
 	local vis = nil
 	ERB:SecureHook(E, "ToggleConfigMode", function(self, override, configType)
